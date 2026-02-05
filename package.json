@@ -1,0 +1,17 @@
+{
+  "name": "dompetku-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web",
+    "lint": "npm run lint --workspaces"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
