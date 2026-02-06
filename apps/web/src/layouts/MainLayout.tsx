@@ -7,7 +7,7 @@ export default function MainLayout() {
   const isDebtsPage = location.pathname === '/debt';
 
   return (
-    <div className="bg-background-light dark:bg-background-dark font-display antialiased min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-white">
+    <div className={`font-display antialiased min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-white ${isDebtsPage ? 'bg-[#0f3d32]' : 'bg-background-light dark:bg-background-dark'}`}>
       {/* Ambient Glow Effects */}
       <div className="fixed top-0 left-0 w-full h-[500px] bg-glow-spot pointer-events-none z-0"></div>
       <div className="fixed bottom-0 right-0 w-[300px] h-[300px] bg-[radial-gradient(circle_at_center,rgba(15,184,139,0.1)_0%,rgba(0,0,0,0)_70%)] pointer-events-none z-0"></div>
