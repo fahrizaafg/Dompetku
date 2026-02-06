@@ -126,7 +126,7 @@ export default function Profile() {
       )}
 
       {/* Top Navigation */}
-      <div className="relative z-20 flex items-center justify-between px-6 pt-8 pb-4">
+      <div className="relative z-20 flex items-center justify-between px-6 pt-2 pb-4">
         <div className="flex flex-col justify-center h-10 shrink-0">
           <span className="text-[10px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider max-w-[100px] sm:max-w-none leading-tight">
             {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}

@@ -228,7 +228,7 @@ export default function Dashboard() {
   return (
     <>
       {/* Header */}
-      <header className="relative z-20 flex items-center justify-between p-6 pt-8">
+      <header className="relative z-20 flex items-center justify-between p-6 pt-2">
         <div className="flex items-center gap-3">
           <div className="relative group cursor-pointer">
             <div className="w-10 h-10 rounded-full bg-gray-700 overflow-hidden ring-2 ring-primary/30">

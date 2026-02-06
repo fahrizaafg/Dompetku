@@ -161,7 +161,7 @@ export default function AddTransaction() {
       <div 
         className="relative z-10 w-full px-6 pt-6 pb-2 flex justify-between items-center shrink-0"
         style={{
-          paddingTop: 'calc(env(safe-area-inset-top) + 1.5rem)'
+          paddingTop: 'calc(env(safe-area-inset-top) + 0.5rem)'
         }}
       >
         <Link to="/" className="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white/10 transition-colors">

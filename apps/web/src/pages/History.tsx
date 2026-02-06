@@ -144,7 +144,7 @@ export default function History() {
       </div>
 
       {/* Top Header */}
-      <header className="flex items-center justify-between px-6 pt-8 pb-4 z-50 sticky top-0">
+      <header className="flex items-center justify-between px-6 pt-2 pb-4 z-50 sticky top-0">
         <div className="flex flex-col justify-center h-10 shrink-0">
           <span className="text-[10px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider max-w-[100px] sm:max-w-none leading-tight">
             {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}

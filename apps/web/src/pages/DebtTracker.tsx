@@ -86,7 +86,7 @@ export default function DebtTracker() {
       <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 pointer-events-none mix-blend-overlay -z-10"></div>
 
       {/* Top Bar - Sticky */}
-      <header className="sticky top-0 z-40 flex items-center justify-between px-6 pt-8 pb-4 shrink-0 backdrop-blur-xl bg-[#0f3d32]/50 border-b border-white/5 transition-all duration-300">
+      <header className="sticky top-0 z-40 flex items-center justify-between px-6 pt-2 pb-4 shrink-0 backdrop-blur-xl bg-[#0f3d32]/50 border-b border-white/5 transition-all duration-300">
         <div className="flex flex-col justify-center h-10 shrink-0">
           <span className="text-[10px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider max-w-[100px] sm:max-w-none leading-tight">
             {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}
