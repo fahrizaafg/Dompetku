@@ -5,7 +5,12 @@ export default function BottomNav() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 px-6 pb-6 pt-2 pointer-events-none flex justify-center w-full">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-50 px-6 pb-6 pt-2 pointer-events-none flex justify-center w-full"
+      style={{
+        paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))'
+      }}
+    >
       <div className="w-full max-w-md pointer-events-auto">
         <div className="glass-panel rounded-2xl h-[72px] flex items-center justify-around relative px-2 shadow-2xl shadow-black/50">
           <Link

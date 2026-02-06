@@ -158,7 +158,12 @@ export default function AddTransaction() {
       )}
 
       {/* Header */}
-      <div className="relative z-10 w-full px-6 pt-6 pb-2 flex justify-between items-center shrink-0">
+      <div 
+        className="relative z-10 w-full px-6 pt-6 pb-2 flex justify-between items-center shrink-0"
+        style={{
+          paddingTop: 'calc(env(safe-area-inset-top) + 1.5rem)'
+        }}
+      >
         <Link to="/" className="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-white/10 transition-colors">
           <span className="material-symbols-outlined text-white">close</span>
         </Link>

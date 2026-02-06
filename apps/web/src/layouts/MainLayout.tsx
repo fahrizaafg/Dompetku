@@ -13,7 +13,12 @@ export default function MainLayout() {
       <div className="fixed bottom-0 right-0 w-[300px] h-[300px] bg-[radial-gradient(circle_at_center,rgba(15,184,139,0.1)_0%,rgba(0,0,0,0)_70%)] pointer-events-none z-0"></div>
 
       {/* Main Container */}
-      <div className={`relative z-10 flex flex-col w-full max-w-md mx-auto ${isFullScreenPage ? 'h-[100dvh] overflow-hidden' : isDebtsPage ? 'min-h-screen' : 'min-h-screen pb-24'}`}>
+      <div 
+        className={`relative z-10 flex flex-col w-full max-w-md mx-auto ${isFullScreenPage ? 'h-[100dvh] overflow-hidden' : isDebtsPage ? 'min-h-screen' : 'min-h-screen pb-24'}`}
+        style={{
+          paddingTop: !isFullScreenPage ? 'env(safe-area-inset-top)' : 0
+        }}
+      >
         <Outlet />
       </div>
 
