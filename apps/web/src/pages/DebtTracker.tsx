@@ -22,6 +22,7 @@ export default function DebtTracker() {
   useEffect(() => {
     // Store original values
     const originalBodyBg = document.body.style.backgroundColor;
+    const originalHtmlBg = document.documentElement.style.backgroundColor;
     
     // Find or create theme-color meta tag
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -31,12 +32,13 @@ export default function DebtTracker() {
         originalThemeColor = metaThemeColor.getAttribute('content') || '#020906';
     } else {
         metaThemeColor = document.createElement('meta');
-         metaThemeColor.setAttribute('name', "theme-color");
-         document.head.appendChild(metaThemeColor);
+        metaThemeColor.setAttribute('name', "theme-color");
+        document.head.appendChild(metaThemeColor);
     }
 
     // Apply new values with !important to override global CSS
     document.body.style.setProperty('background-color', '#0f3d32', 'important');
+    document.documentElement.style.setProperty('background-color', '#0f3d32', 'important');
     metaThemeColor.setAttribute('content', '#0f3d32');
 
     return () => {
@@ -45,6 +47,12 @@ export default function DebtTracker() {
             document.body.style.setProperty('background-color', originalBodyBg, 'important');
         } else {
             document.body.style.removeProperty('background-color');
+        }
+
+        if (originalHtmlBg) {
+            document.documentElement.style.setProperty('background-color', originalHtmlBg, 'important');
+        } else {
+            document.documentElement.style.removeProperty('background-color');
         }
         metaThemeColor.setAttribute('content', originalThemeColor);
     };
