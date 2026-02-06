@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useDebt, type Debt } from "../context/DebtContext";
 import PayoffModal from "../components/PayoffModal";
 import AddDebtModal from "../components/debt/AddDebtModal";
@@ -17,6 +17,38 @@ export default function DebtTracker() {
   const [showPayoffModal, setShowPayoffModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedDebtId, setSelectedDebtId] = useState<string | null>(null);
+
+  // Dynamic Theme Color for iOS Overscroll/Status Bar alignment
+  useEffect(() => {
+    // Store original values
+    const originalBodyBg = document.body.style.backgroundColor;
+    
+    // Find or create theme-color meta tag
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    let originalThemeColor = '#020906'; // Default fallback
+    
+    if (metaThemeColor) {
+        originalThemeColor = metaThemeColor.getAttribute('content') || '#020906';
+    } else {
+        metaThemeColor = document.createElement('meta');
+         metaThemeColor.setAttribute('name', "theme-color");
+         document.head.appendChild(metaThemeColor);
+    }
+
+    // Apply new values with !important to override global CSS
+    document.body.style.setProperty('background-color', '#0f3d32', 'important');
+    metaThemeColor.setAttribute('content', '#0f3d32');
+
+    return () => {
+        // Restore original values on cleanup
+        if (originalBodyBg) {
+            document.body.style.setProperty('background-color', originalBodyBg, 'important');
+        } else {
+            document.body.style.removeProperty('background-color');
+        }
+        metaThemeColor.setAttribute('content', originalThemeColor);
+    };
+  }, []);
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
