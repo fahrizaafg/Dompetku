@@ -40,10 +40,10 @@ export default function Dashboard() {
   useEffect(() => {
     const updateGreeting = () => {
       const hour = new Date().getHours();
-      if (hour >= 5 && hour < 12) setGreeting("Good Morning,");
-      else if (hour >= 12 && hour < 18) setGreeting("Good Afternoon,");
-      else if (hour >= 18 && hour < 22) setGreeting("Good Evening,");
-      else setGreeting("Good Night,");
+      if (hour >= 5 && hour < 12) setGreeting("Selamat Pagi,");
+      else if (hour >= 12 && hour < 15) setGreeting("Selamat Siang,"); // Adjusted for Indonesian common usage
+      else if (hour >= 15 && hour < 18) setGreeting("Selamat Sore,");
+      else setGreeting("Selamat Malam,");
     };
     updateGreeting();
     const interval = setInterval(updateGreeting, 60000);
@@ -160,7 +160,7 @@ export default function Dashboard() {
                 .filter(t => t.type === 'EXPENSE' && t.date === dateStr)
                 .reduce((sum, t) => sum + t.amount, 0);
             dataPoints.push({
-                label: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                label: date.toLocaleDateString('id-ID', { weekday: 'short' }),
                 amount: dayExpenses
             });
         }
@@ -290,7 +290,7 @@ export default function Dashboard() {
                     {/* Percent Indicator */}
                      <div className={`text-right flex flex-col items-end ${budgetInfo.isOverBudget ? 'text-[#ff4d5e]' : 'text-accent-yellow'}`}>
                         <span className="text-xl font-bold">{Math.round(budgetInfo.percentUsed)}%</span>
-                        <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Used</p>
+                        <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Terpakai</p>
                     </div>
                 </div>
 
@@ -327,10 +327,10 @@ export default function Dashboard() {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h3 className="text-white text-base font-semibold">
-                Expense Trend
+                Tren Pengeluaran
               </h3>
               <p className="text-[#92c9ba] text-xs mt-0.5">
-                {trendView === 'weekly' ? 'Last 7 Days' : trendView === 'daily' ? 'Today' : 'This Month'}
+                {trendView === 'weekly' ? '7 Hari Terakhir' : trendView === 'daily' ? 'Hari Ini' : 'Bulan Ini'}
               </p>
             </div>
             <div className="flex gap-1">

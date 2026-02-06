@@ -75,6 +75,9 @@ export default function DebtTracker() {
 
   const netBalance = totalReceivable - totalDebt;
 
+  const totalDebtCount = debts.filter(d => d.type === 'DEBT').length;
+  const totalReceivableCount = debts.filter(d => d.type === 'RECEIVABLE').length;
+
   return (
     <div className="flex flex-col min-h-full bg-gradient-to-br from-[#0f3d32] via-[#052e22] to-[#020b08] relative isolate">
       {/* Decorative background blurs */}
@@ -84,15 +87,15 @@ export default function DebtTracker() {
 
       {/* Top Bar - Sticky */}
       <header className="sticky top-0 z-40 flex items-center justify-between px-6 pt-8 pb-4 shrink-0 backdrop-blur-xl bg-[#0f3d32]/50 border-b border-white/5 transition-all duration-300">
-        <div className="flex flex-col justify-center h-10">
-          <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-            {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
+        <div className="flex flex-col justify-center h-10 shrink-0">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider max-w-[100px] sm:max-w-none leading-tight">
+            {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}
           </span>
         </div>
-        <h1 className="text-xl font-bold tracking-tight text-white drop-shadow-sm absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
-          Debt Manager <span className="text-[9px] font-bold bg-gradient-to-r from-gold to-yellow-600 text-black px-1.5 py-0.5 rounded-full shadow-lg shadow-gold/20">PRO</span>
+        <h1 className="absolute left-1/2 -translate-x-1/2 text-lg sm:text-xl font-bold tracking-tight text-white drop-shadow-sm flex items-center gap-2 text-center pointer-events-none">
+          Manajer Hutang <span className="hidden sm:inline-block text-[9px] font-bold bg-gradient-to-r from-gold to-yellow-600 text-black px-1.5 py-0.5 rounded-full shadow-lg shadow-gold/20">PRO</span>
         </h1>
-        <div className="flex gap-3 relative z-50">
+        <div className="flex gap-3 relative z-50 shrink-0">
             <div className="relative">
                 <button 
                     onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -109,29 +112,29 @@ export default function DebtTracker() {
                                 onClick={() => { setFilterStatus('ALL'); setCurrentPage(1); }}
                                 className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between group ${filterStatus === 'ALL' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
                             >
-                                <span className="group-hover:translate-x-1 transition-transform">All Status</span>
+                                <span className="group-hover:translate-x-1 transition-transform">Semua Status</span>
                                 {filterStatus === 'ALL' && <span className="material-symbols-outlined text-sm">check</span>}
                             </button>
                             <button
                                 onClick={() => { setFilterStatus('UNPAID'); setCurrentPage(1); }}
                                 className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between group ${filterStatus === 'UNPAID' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
                             >
-                                <span className="group-hover:translate-x-1 transition-transform">Unpaid Only</span>
+                                <span className="group-hover:translate-x-1 transition-transform">Belum Lunas</span>
                                 {filterStatus === 'UNPAID' && <span className="material-symbols-outlined text-sm">check</span>}
                             </button>
                             <button
                                 onClick={() => { setFilterStatus('PAID'); setCurrentPage(1); }}
                                 className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between group ${filterStatus === 'PAID' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
                             >
-                                <span className="group-hover:translate-x-1 transition-transform">Paid Only</span>
+                                <span className="group-hover:translate-x-1 transition-transform">Lunas</span>
                                 {filterStatus === 'PAID' && <span className="material-symbols-outlined text-sm">check</span>}
                             </button>
                             
                             <div className="my-1 border-t border-white/5"></div>
-                            <div className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-1">Date Range</div>
+                            <div className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-1">Rentang Tanggal</div>
                             <div className="px-4 py-2 flex flex-col gap-3">
                                 <div className="space-y-1">
-                                    <label className="text-[10px] text-gray-400 font-medium">From</label>
+                                    <label className="text-[10px] text-gray-400 font-medium">Dari</label>
                                     <input 
                                         type="date" 
                                         value={dateRange.start}
@@ -140,7 +143,7 @@ export default function DebtTracker() {
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[10px] text-gray-400 font-medium">To</label>
+                                    <label className="text-[10px] text-gray-400 font-medium">Sampai</label>
                                     <input 
                                         type="date" 
                                         value={dateRange.end}
@@ -153,7 +156,7 @@ export default function DebtTracker() {
                                         onClick={() => { setDateRange({ start: '', end: '' }); setCurrentPage(1); }}
                                         className="mt-1 text-[10px] text-rose-400 hover:text-rose-300 text-center w-full py-1.5 rounded bg-rose-500/10 border border-rose-500/20 transition-colors"
                                     >
-                                        Clear Dates
+                                        Hapus Tanggal
                                     </button>
                                 )}
                             </div>
@@ -171,11 +174,11 @@ export default function DebtTracker() {
           <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/20 via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
           <div className="flex justify-between items-start mb-8">
             <div>
-              <p className="text-xs font-medium text-emerald-100/60 mb-1 uppercase tracking-wider">Net Balance</p>
+              <p className="text-xs font-medium text-emerald-100/60 mb-1 uppercase tracking-wider">Saldo Bersih</p>
               <h2 className="text-4xl font-bold tracking-tight text-white drop-shadow-lg">
                 <span className="text-2xl align-top opacity-60 mr-1">Rp</span>
                 {Math.abs(netBalance).toLocaleString('id-ID')}
-                {netBalance < 0 && <span className="text-xs text-rose-400 ml-2 font-bold bg-rose-500/10 px-2 py-1 rounded-full border border-rose-500/20">DEFICIT</span>}
+                {netBalance < 0 && <span className="text-xs text-rose-400 ml-2 font-bold bg-rose-500/10 px-2 py-1 rounded-full border border-rose-500/20">DEFISIT</span>}
               </h2>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gold to-yellow-600 flex items-center justify-center shadow-lg shadow-gold/20 border border-white/20 group-hover:scale-110 transition-transform duration-500">
@@ -187,14 +190,14 @@ export default function DebtTracker() {
             <div className="bg-black/20 rounded-2xl p-4 border border-white/5 hover:bg-black/30 transition-colors group/item">
               <div className="flex items-center gap-2 mb-2">
                 <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></span>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">You Owe</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Hutang Anda</p>
               </div>
               <p className="text-lg font-bold text-rose-400 tabular-nums group-hover/item:scale-105 transition-transform origin-left">Rp {totalDebt.toLocaleString('id-ID')}</p>
             </div>
             <div className="bg-black/20 rounded-2xl p-4 border border-white/5 hover:bg-black/30 transition-colors group/item">
               <div className="flex items-center gap-2 mb-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Owed to You</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Dihutangkan ke Anda</p>
               </div>
               <p className="text-lg font-bold text-emerald-400 tabular-nums group-hover/item:scale-105 transition-transform origin-left">Rp {totalReceivable.toLocaleString('id-ID')}</p>
             </div>
@@ -203,9 +206,9 @@ export default function DebtTracker() {
           {/* Progress Bar */}
           <div className="w-full mb-5">
             <div className="flex justify-between text-[10px] text-gray-400 mb-2 font-medium uppercase tracking-wider">
-              <span>Debt Ratio</span>
+              <span>Rasio Hutang</span>
               <span className={totalDebt === 0 ? 'text-emerald-400' : 'text-gray-400'}>
-                 {totalDebt === 0 ? 'Debt Free' : `${Math.round((totalDebt / (totalDebt + totalReceivable || 1)) * 100)}%`}
+                 {totalDebt === 0 ? 'Bebas Hutang' : `${Math.round((totalDebt / (totalDebt + totalReceivable || 1)) * 100)}%`}
               </span>
             </div>
             <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden flex shadow-inner">
@@ -225,7 +228,7 @@ export default function DebtTracker() {
             className="w-full py-3 rounded-xl bg-gradient-to-r from-white/10 to-white/5 border border-white/10 text-xs font-bold text-white hover:text-gold hover:border-gold/30 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-black/20 active:scale-[0.98]"
           >
             <span className="material-symbols-outlined text-[18px] text-gold group-hover:rotate-12 transition-transform">strategy</span>
-            Generate Smart Payoff Strategy
+            Buat Strategi Pelunasan Cerdas
           </button>
         </div>
 
@@ -237,7 +240,7 @@ export default function DebtTracker() {
               tab === 'ALL' ? 'bg-white/15 text-white shadow-lg border border-white/10' : 'text-gray-500 hover:text-white hover:bg-white/5'
             }`}
           >
-            All
+            Semua
           </button>
           <button 
             onClick={() => { setTab('DEBT'); setCurrentPage(1); }} 
@@ -245,7 +248,7 @@ export default function DebtTracker() {
               tab === 'DEBT' ? 'bg-rose-500/20 text-rose-300 shadow-lg border border-rose-500/20' : 'text-gray-500 hover:text-rose-400 hover:bg-rose-500/5'
             }`}
           >
-            Debts
+            Hutang
           </button>
           <button 
             onClick={() => { setTab('RECEIVABLE'); setCurrentPage(1); }} 
@@ -253,68 +256,86 @@ export default function DebtTracker() {
               tab === 'RECEIVABLE' ? 'bg-emerald-500/20 text-emerald-300 shadow-lg border border-emerald-500/20' : 'text-gray-500 hover:text-emerald-400 hover:bg-emerald-500/5'
             }`}
           >
-            Receivables
+            Piutang
           </button>
         </div>
 
         {/* List Section */}
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-center px-1">
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                Records
-                <span className="px-2 py-0.5 rounded-full bg-white/10 text-[10px] text-gray-300 font-mono">{filteredDebts.length}</span>
-            </h3>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4 px-1 border-b border-white/5 pb-2">
+            <div className="flex flex-col items-end gap-0.5 flex-1">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider">Hutang</h3>
+                <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                    {totalDebtCount} Hutang
+                </span>
+            </div>
+            
+            <div className="flex flex-col items-center gap-1 h-full justify-center pb-0.5 opacity-20">
+                 <span className="w-px h-3 bg-white"></span>
+                 <span className="w-px h-3 bg-white"></span>
+            </div>
+
+            <div className="flex flex-col items-start gap-0.5 flex-1">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider">Piutang</h3>
+                <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    {totalReceivableCount} Piutang
+                </span>
+            </div>
+
+            <div className="flex items-center gap-2 ml-auto">
                 <button 
                     onClick={() => setShowAddModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-lg shadow-emerald-900/40 transition-all active:scale-95 border border-emerald-400/20"
+                    className="h-8 flex items-center gap-1.5 px-3 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-[10px] font-bold shadow-lg shadow-emerald-900/40 transition-all active:scale-95 border border-emerald-400/20 uppercase tracking-wide"
                 >
-                    <span className="material-symbols-outlined text-sm">add</span>
-                    New Record
+                    <span className="material-symbols-outlined text-xs">add</span>
+                    Baru
                 </button>
                 <div className="relative">
                     <button 
                         onClick={() => setShowSortMenu(!showSortMenu)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-bold border border-white/10 transition-all active:scale-95"
+                        className="h-8 flex items-center gap-1.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-white text-[10px] font-bold border border-white/10 transition-all active:scale-95 uppercase tracking-wide"
                     >
-                        <span className="material-symbols-outlined text-sm">sort</span>
-                        {sortBy === 'date' ? 'Date' : 'Amount'}
+                        <span className="material-symbols-outlined text-xs">sort</span>
+                        {sortBy === 'date' ? 'Tanggal' : 'Jumlah'}
                     </button>
                     
                     {showSortMenu && (
                         <>
                             <div className="fixed inset-0 z-40" onClick={() => setShowSortMenu(false)} />
-                            <div className="absolute right-0 top-12 w-48 bg-[#0a120f]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col py-2 animate-in fade-in zoom-in-95 duration-200 ring-1 ring-white/5">
-                                <div className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-1">Sort By</div>
+                            <div className="absolute right-0 top-10 w-max min-w-[120px] max-w-[200px] bg-[#0a120f]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col py-2 animate-in fade-in zoom-in-95 duration-200 ring-1 ring-white/5">
+                                <div className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-1 whitespace-nowrap">Urutkan</div>
                                 <button
                                     onClick={() => { setSortBy('date'); setCurrentPage(1); setShowSortMenu(false); }}
-                                    className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between group ${sortBy === 'date' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
+                                    className={`px-4 py-2 text-left text-xs hover:bg-white/5 transition-colors flex items-center justify-between group whitespace-nowrap ${sortBy === 'date' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
                                 >
-                                    <span className="group-hover:translate-x-1 transition-transform">Date</span>
-                                    {sortBy === 'date' && <span className="material-symbols-outlined text-sm">check</span>}
+                                    <span className="group-hover:translate-x-1 transition-transform">Tanggal</span>
+                                    {sortBy === 'date' && <span className="material-symbols-outlined text-xs">check</span>}
                                 </button>
                                 <button
                                     onClick={() => { setSortBy('amount'); setCurrentPage(1); setShowSortMenu(false); }}
-                                    className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between group ${sortBy === 'amount' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
+                                    className={`px-4 py-2 text-left text-xs hover:bg-white/5 transition-colors flex items-center justify-between group ${sortBy === 'amount' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
                                 >
-                                    <span className="group-hover:translate-x-1 transition-transform">Amount</span>
-                                    {sortBy === 'amount' && <span className="material-symbols-outlined text-sm">check</span>}
+                                    <span className="group-hover:translate-x-1 transition-transform">Jumlah</span>
+                                    {sortBy === 'amount' && <span className="material-symbols-outlined text-xs">check</span>}
                                 </button>
+                                
                                 <div className="my-1 border-t border-white/5"></div>
-                                <div className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-1">Order</div>
-                                <button
-                                    onClick={() => { setSortOrder('asc'); setCurrentPage(1); setShowSortMenu(false); }}
-                                    className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between group ${sortOrder === 'asc' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
-                                >
-                                    Ascending
-                                    {sortOrder === 'asc' && <span className="material-symbols-outlined text-sm">check</span>}
-                                </button>
+                                <div className="px-4 py-2 text-[10px] font-bold text-gray-500 uppercase tracking-wider border-b border-white/5 mb-1">Urutan</div>
                                 <button
                                     onClick={() => { setSortOrder('desc'); setCurrentPage(1); setShowSortMenu(false); }}
-                                    className={`px-4 py-2.5 text-left text-sm hover:bg-white/5 transition-colors flex items-center justify-between ${sortOrder === 'desc' ? 'text-gold font-bold' : 'text-gray-300'}`}
+                                    className={`px-4 py-2 text-left text-xs hover:bg-white/5 transition-colors flex items-center justify-between group ${sortOrder === 'desc' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
                                 >
-                                    Descending
-                                    {sortOrder === 'desc' && <span className="material-symbols-outlined text-sm">check</span>}
+                                    <span className="group-hover:translate-x-1 transition-transform">Terbesar/Baru</span>
+                                    {sortOrder === 'desc' && <span className="material-symbols-outlined text-xs">check</span>}
+                                </button>
+                                <button
+                                    onClick={() => { setSortOrder('asc'); setCurrentPage(1); setShowSortMenu(false); }}
+                                    className={`px-4 py-2 text-left text-xs hover:bg-white/5 transition-colors flex items-center justify-between group ${sortOrder === 'asc' ? 'text-emerald-400 font-bold' : 'text-gray-300'}`}
+                                >
+                                    <span className="group-hover:translate-x-1 transition-transform">Terkecil/Lama</span>
+                                    {sortOrder === 'asc' && <span className="material-symbols-outlined text-xs">check</span>}
                                 </button>
                             </div>
                         </>

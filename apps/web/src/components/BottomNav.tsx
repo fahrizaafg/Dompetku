@@ -24,7 +24,7 @@ export default function BottomNav() {
                   : "opacity-0 group-hover:opacity-100 absolute bottom-1.5"
               }`}
             >
-              Home
+              Beranda
             </span>
           </Link>
           
@@ -44,7 +44,7 @@ export default function BottomNav() {
                   : "opacity-0 group-hover:opacity-100 absolute bottom-1.5"
               }`}
             >
-              History
+              Riwayat
             </span>
           </Link>
           
@@ -67,7 +67,7 @@ export default function BottomNav() {
                   : "opacity-0 group-hover:opacity-100 absolute bottom-1.5"
               }`}
             >
-              Debts
+              Hutang
             </span>
           </Link>
           
@@ -87,7 +87,7 @@ export default function BottomNav() {
                   : "opacity-0 group-hover:opacity-100 absolute bottom-1.5"
               }`}
             >
-              Profile
+              Profil
             </span>
           </Link>
           

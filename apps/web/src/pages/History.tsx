@@ -4,15 +4,32 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import Pagination from "../components/common/Pagination";
+import ConfirmationModal from "../components/common/ConfirmationModal";
 
 export default function History() {
-  const { transactions } = useUser();
+  const { transactions, deleteTransaction } = useUser();
   const [filter, setFilter] = useState<'ALL' | 'INCOME' | 'EXPENSE'>('ALL');
   const [sortBy, setSortBy] = useState<'DATE' | 'AMOUNT' | 'TITLE'>('DATE');
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC');
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   
+  // Confirmation Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<number | null>(null);
+
+  const handleDeleteClick = (id: number) => {
+    setSelectedTransactionId(id);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedTransactionId) {
+      deleteTransaction(selectedTransactionId);
+      setSelectedTransactionId(null);
+    }
+  };
+
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -64,7 +81,7 @@ export default function History() {
   }, [paginatedTransactions, isDateSorted]);
 
   const formatDate = (dateStr: string) => {
-    if (!isDateSorted && dateStr === 'All Results') return 'All Results';
+    if (!isDateSorted && dateStr === 'All Results') return 'Semua Hasil';
     
     const date = new Date(dateStr);
     const today = new Date();
@@ -74,12 +91,12 @@ export default function History() {
     const dayName = date.toLocaleDateString('id-ID', { weekday: 'long' });
 
     if (date.toDateString() === today.toDateString()) {
-      return `Today, ${dayName} ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+      return `Hari Ini, ${dayName} ${date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}`;
     }
     if (date.toDateString() === yesterday.toDateString()) {
-      return `Yesterday, ${dayName} ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+      return `Kemarin, ${dayName} ${date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}`;
     }
-    return `${dayName} ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+    return `${dayName} ${date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`;
   };
 
   const exportToPDF = () => {
@@ -128,12 +145,12 @@ export default function History() {
 
       {/* Top Header */}
       <header className="flex items-center justify-between px-6 pt-8 pb-4 z-50 sticky top-0">
-        <div className="flex flex-col">
-          <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-            {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
+        <div className="flex flex-col justify-center h-10 shrink-0">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider max-w-[100px] sm:max-w-none leading-tight">
+            {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}
           </span>
         </div>
-        <h1 className="text-xl font-bold tracking-tight text-white absolute left-1/2 -translate-x-1/2">History</h1>
+        <h1 className="text-xl font-bold tracking-tight text-white absolute left-1/2 -translate-x-1/2 pointer-events-none">Riwayat</h1>
         
         <div className="relative" onClick={(e) => e.stopPropagation()}>
             <button 
@@ -145,59 +162,59 @@ export default function History() {
             
             {showSortMenu && (
                 <div className="absolute right-0 top-12 w-48 glass-panel rounded-xl p-2 z-50 flex flex-col gap-1 shadow-xl">
-                    <p className="text-xs text-white/40 px-3 py-2 font-medium">SORT BY</p>
-                    <button onClick={() => { setSortBy('DATE'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortBy === 'DATE' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Date</button>
-                    <button onClick={() => { setSortBy('AMOUNT'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortBy === 'AMOUNT' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Amount</button>
-                    <button onClick={() => { setSortBy('TITLE'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortBy === 'TITLE' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Category (Title)</button>
+                    <p className="text-xs text-white/40 px-3 py-2 font-medium">URUTKAN</p>
+                    <button onClick={() => { setSortBy('DATE'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortBy === 'DATE' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Tanggal</button>
+                    <button onClick={() => { setSortBy('AMOUNT'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortBy === 'AMOUNT' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Jumlah</button>
+                    <button onClick={() => { setSortBy('TITLE'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortBy === 'TITLE' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Kategori (Judul)</button>
                     <div className="h-px bg-white/10 my-1"></div>
-                    <p className="text-xs text-white/40 px-3 py-2 font-medium">ORDER</p>
-                    <button onClick={() => { setSortOrder('ASC'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortOrder === 'ASC' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Ascending</button>
-                    <button onClick={() => { setSortOrder('DESC'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortOrder === 'DESC' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Descending</button>
+                    <p className="text-xs text-white/40 px-3 py-2 font-medium">URUTAN</p>
+                    <button onClick={() => { setSortOrder('ASC'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortOrder === 'ASC' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Naik (Asc)</button>
+                    <button onClick={() => { setSortOrder('DESC'); setCurrentPage(1); setShowSortMenu(false); }} className={`px-3 py-2 rounded-lg text-sm text-left ${sortOrder === 'DESC' ? 'bg-primary text-black font-semibold' : 'text-white hover:bg-white/10'}`}>Turun (Desc)</button>
                 </div>
             )}
         </div>
       </header>
 
       {/* Filters */}
-      <div className="flex-none px-6 py-4 z-10 flex justify-between items-center">
-        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+      <div className="flex-none px-6 py-4 z-10 flex justify-between items-center gap-4">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 flex-1 min-w-0 mask-linear-fade">
           <button 
             onClick={() => { setFilter('ALL'); setCurrentPage(1); }} 
-            className={`flex h-9 shrink-0 items-center justify-center px-5 rounded-full text-sm font-semibold transition-transform active:scale-95 ${
+            className={`flex h-8 shrink-0 items-center justify-center px-4 rounded-full text-xs font-semibold transition-transform active:scale-95 ${
               filter === 'ALL' 
                 ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                 : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
             }`}
           >
-            All
+            Semua
           </button>
           <button 
             onClick={() => { setFilter('INCOME'); setCurrentPage(1); }} 
-            className={`flex h-9 shrink-0 items-center justify-center px-5 rounded-full text-sm font-medium transition-transform active:scale-95 ${
+            className={`flex h-8 shrink-0 items-center justify-center px-4 rounded-full text-xs font-medium transition-transform active:scale-95 ${
               filter === 'INCOME' 
                 ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                 : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
             }`}
           >
-            Income
+            Pemasukan
           </button>
           <button 
             onClick={() => { setFilter('EXPENSE'); setCurrentPage(1); }} 
-            className={`flex h-9 shrink-0 items-center justify-center px-5 rounded-full text-sm font-medium transition-transform active:scale-95 ${
+            className={`flex h-8 shrink-0 items-center justify-center px-4 rounded-full text-xs font-medium transition-transform active:scale-95 ${
               filter === 'EXPENSE' 
                 ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                 : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white'
             }`}
           >
-            Expense
+            Pengeluaran
           </button>
         </div>
         
-        <div className="relative" onClick={(e) => e.stopPropagation()}>
+        <div className="relative shrink-0" onClick={(e) => e.stopPropagation()}>
             <button 
                 onClick={() => setShowExportMenu(!showExportMenu)}
                 className={`flex items-center justify-center w-9 h-9 rounded-full border transition-colors ${showExportMenu ? 'bg-white text-black border-white' : 'bg-white/5 border-white/10 text-white/70 hover:text-primary hover:bg-white/10'}`} 
-                title="Export to PDF/Excel"
+                title="Ekspor ke PDF/Excel"
             >
             <span className="material-symbols-outlined text-[20px]">download</span>
             </button>
@@ -257,8 +274,19 @@ export default function History() {
                         <p className="text-white/40 text-[10px] mt-1 font-medium">{t.time}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`${amountClass} font-bold text-sm`}>{sign} Rp {t.amount.toLocaleString('id-ID')}</p>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <p className={`${amountClass} font-bold text-sm`}>{sign} Rp {t.amount.toLocaleString('id-ID')}</p>
+                      </div>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(t.id);
+                        }}
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-rose-500/40 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">delete</span>
+                      </button>
                     </div>
                   </div>
                 );
@@ -277,6 +305,16 @@ export default function History() {
           />
         )}
       </div>
+
+      <ConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Hapus Transaksi?"
+        message="Transaksi yang dihapus tidak dapat dikembalikan. Apakah Anda yakin?"
+        confirmText="Hapus"
+        isDangerous={true}
+      />
     </div>
   );
 }

@@ -87,8 +87,8 @@ export default function Profile() {
   };
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
-      alert("Logging out...");
+    if (window.confirm("Apakah Anda yakin ingin keluar?")) {
+      alert("Keluar...");
       // In real app, clear token
       window.location.reload();
     }
@@ -112,7 +112,7 @@ export default function Profile() {
             className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all border border-white/5 group z-50"
           >
             <span className="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
-            <span className="text-sm font-medium">Back</span>
+            <span className="text-sm font-medium">Kembali</span>
           </button>
           
           <div className="relative w-full max-w-sm aspect-square p-6 flex items-center justify-center">
@@ -127,17 +127,17 @@ export default function Profile() {
 
       {/* Top Navigation */}
       <div className="relative z-20 flex items-center justify-between px-6 pt-8 pb-4">
-        <div className="flex flex-col">
-          <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-            {new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}
+        <div className="flex flex-col justify-center h-10 shrink-0">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-400 uppercase tracking-wider max-w-[100px] sm:max-w-none leading-tight">
+            {new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' })}
           </span>
         </div>
-        <h1 className="text-xl font-bold tracking-tight text-white absolute left-1/2 -translate-x-1/2">Profile</h1>
+        <h1 className="text-xl font-bold tracking-tight text-white absolute left-1/2 -translate-x-1/2 pointer-events-none">Profil</h1>
         <NotificationButton />
       </div>
 
       {/* Scrollable Content */}
-      <div className="relative z-10 flex-1 px-6 overflow-y-auto hide-scrollbar pb-24">
+      <div className="relative z-10 flex-1 px-6 overflow-y-auto hide-scrollbar pb-8">
         {/* Profile Header */}
         <div className="flex flex-col items-center justify-center mb-8 mt-4">
           <div className="relative group mb-4">
@@ -169,7 +169,7 @@ export default function Profile() {
           
           {/* Personal Info Group */}
           <div>
-            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-1">Personal Info</h3>
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-1">Info Pribadi</h3>
             <div className="glass-panel rounded-2xl overflow-hidden border border-white/5">
               
               {/* Display Name Row */}
@@ -179,7 +179,7 @@ export default function Profile() {
                     <span className="material-symbols-outlined text-[20px]">badge</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Display Name</p>
+                    <p className="text-sm font-medium text-white">Nama Tampilan</p>
                     <p className="text-xs text-white/40">{name}</p>
                   </div>
                 </div>
@@ -203,7 +203,7 @@ export default function Profile() {
                     onClick={() => { setTempName(name); setIsEditingName(true); }}
                     className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-white transition-colors border border-white/5"
                   >
-                    Change Name
+                    Ubah Nama
                   </button>
                 )}
               </div>
@@ -215,15 +215,15 @@ export default function Profile() {
                     <span className="material-symbols-outlined text-[20px]">account_circle</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Profile Picture</p>
-                    <p className="text-xs text-white/40">Update your photo</p>
+                    <p className="text-sm font-medium text-white">Foto Profil</p>
+                    <p className="text-xs text-white/40">Perbarui foto anda</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => fileInputRef.current?.click()}
                   className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-semibold text-white transition-colors border border-white/5"
                 >
-                  Change Photo
+                  Ubah Foto
                 </button>
               </div>
 
@@ -232,7 +232,7 @@ export default function Profile() {
 
           {/* Financial Settings Group */}
           <div>
-            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-1">Financial</h3>
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-1">Keuangan</h3>
             <div className="glass-panel rounded-2xl overflow-hidden border border-white/5">
               <div className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
                 <div className="flex items-center gap-3">
@@ -240,8 +240,8 @@ export default function Profile() {
                     <span className="material-symbols-outlined text-[20px]">account_balance_wallet</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Monthly Budget</p>
-                    <p className="text-xs text-white/40">Set your limit</p>
+                    <p className="text-sm font-medium text-white">Anggaran Bulanan</p>
+                    <p className="text-xs text-white/40">Atur batas anda</p>
                   </div>
                 </div>
                 
@@ -252,7 +252,7 @@ export default function Profile() {
                        type="text"
                        value={tempBudget}
                        onChange={handleBudgetChange}
-                       className="w-28 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-right text-sm font-bold text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
+                       className="w-28 bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-right text-xs font-bold text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
                        autoFocus
                        onBlur={saveBudget}
                        onKeyDown={(e) => e.key === 'Enter' && saveBudget()}
@@ -279,14 +279,14 @@ export default function Profile() {
 
           {/* About App Group */}
           <div>
-            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-1">About App</h3>
+            <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-3 px-1">Tentang Aplikasi</h3>
             <div className="glass-panel rounded-2xl overflow-hidden border border-white/5 p-4 space-y-4">
               <div className="flex items-center gap-4">
                 <div className="size-12 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center border border-white/10 shadow-lg shadow-primary/5">
                    <span className="material-symbols-outlined text-primary text-[24px]">verified</span>
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-sm">Made by Fahriza</h4>
+                  <h4 className="text-white font-bold text-sm">Dibuat oleh Fahriza</h4>
                   <p className="text-white/40 text-xs">@fahrizaafg</p>
                 </div>
               </div>
@@ -314,9 +314,9 @@ export default function Profile() {
           </div>
 
           {/* Logout */}
-          <button onClick={handleLogout} className="w-full py-4 glass-panel rounded-2xl text-rose-400 font-semibold flex items-center justify-center gap-2 hover:bg-rose-500/10 transition-colors border border-rose-500/20 mt-2">
+          <button onClick={handleLogout} className="w-full py-4 glass-panel rounded-2xl text-rose-400 font-semibold flex items-center justify-center gap-2 hover:bg-rose-500/10 transition-colors border border-rose-500/20">
             <span className="material-symbols-outlined">logout</span>
-            Logout
+            Keluar
           </button>
         </div>
       </div>

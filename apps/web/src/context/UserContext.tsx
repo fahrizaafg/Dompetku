@@ -21,6 +21,7 @@ interface UserContextType {
   setMonthlyBudget: (amount: number) => void;
   transactions: Transaction[];
   addTransaction: (transaction: Omit<Transaction, "id">) => Promise<void>;
+  deleteTransaction: (id: number) => void;
   isLoading: boolean;
   error: string | null;
 }
@@ -77,11 +78,15 @@ export function UserProvider({ children }: { children: ReactNode }) {
         });
         // No artificial delay needed
     } catch (err) {
-        setError("Failed to add transaction");
+        setError("Gagal menambahkan transaksi");
         console.error(err); // Log error for debugging
     } finally {
         setIsLoading(false);
     }
+  };
+
+  const deleteTransaction = (id: number) => {
+    setTransactions(prev => prev.filter(t => t.id !== id));
   };
 
   return (
@@ -95,6 +100,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setMonthlyBudget,
         transactions,
         addTransaction,
+        deleteTransaction,
         isLoading,
         error
       }}

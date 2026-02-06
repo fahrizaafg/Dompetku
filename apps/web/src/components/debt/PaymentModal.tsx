@@ -48,12 +48,12 @@ export default function PaymentModal({ isOpen, onClose, debtId, remainingAmount 
     const numAmount = parseInt(amount.replace(/\D/g, ''));
     
     if (!numAmount || numAmount <= 0) {
-      setError('Please enter a valid amount');
+      setError('Mohon masukkan jumlah yang valid');
       return;
     }
 
     if (numAmount > remainingAmount) {
-      setError(`Maximum payment allowed is Rp ${remainingAmount.toLocaleString('id-ID')}`);
+      setError(`Pembayaran maksimal adalah Rp ${remainingAmount.toLocaleString('id-ID')}`);
       return;
     }
 
@@ -71,20 +71,20 @@ export default function PaymentModal({ isOpen, onClose, debtId, remainingAmount 
       
       <div className="relative w-full max-w-lg bg-[#0a120f] border-t sm:border border-white/10 rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl animate-in slide-in-from-bottom-10">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white">Record Payment</h2>
+          <h2 className="text-xl font-bold text-white">Catat Pembayaran</h2>
           <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
 
         <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/5 flex items-center justify-between">
-          <span className="text-sm text-gray-300">Remaining Debt</span>
+          <span className="text-sm text-gray-300">Sisa Hutang</span>
           <span className="text-lg font-bold text-white">Rp {remainingAmount.toLocaleString('id-ID')}</span>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Payment Amount</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Jumlah Pembayaran</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gold font-bold text-sm">Rp</span>
               <input
@@ -104,7 +104,7 @@ export default function PaymentModal({ isOpen, onClose, debtId, remainingAmount 
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Date & Time</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Tanggal & Waktu</label>
             <input
               type="datetime-local"
               value={date}
@@ -114,7 +114,7 @@ export default function PaymentModal({ isOpen, onClose, debtId, remainingAmount 
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-2">Note (Optional)</label>
+            <label className="block text-xs font-medium text-gray-400 mb-2">Keterangan (Opsional)</label>
             
             <div className="flex flex-wrap justify-center gap-3 mb-4">
               {PAYMENT_TEMPLATES.map((template) => {
@@ -147,7 +147,7 @@ export default function PaymentModal({ isOpen, onClose, debtId, remainingAmount 
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-gold/50 transition-colors"
-              placeholder="e.g., Transfer via BCA"
+              placeholder="cth., Transfer via BCA"
             />
           </div>
 
@@ -155,7 +155,7 @@ export default function PaymentModal({ isOpen, onClose, debtId, remainingAmount 
             type="submit"
             className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary to-emerald-600 text-white font-bold text-sm shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all mt-2"
           >
-            Confirm Payment
+            Konfirmasi Pembayaran
           </button>
         </form>
       </div>

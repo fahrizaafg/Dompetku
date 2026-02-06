@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { type Debt } from '../../context/DebtContext';
+import { type Debt, useDebt } from '../../context/DebtContext';
 import PaymentModal from './PaymentModal';
+import ConfirmationModal from '../common/ConfirmationModal';
 
 interface DebtDetailModalProps {
   debt: Debt;
@@ -9,7 +10,9 @@ interface DebtDetailModalProps {
 }
 
 export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps) {
+  const { deleteDebt } = useDebt();
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const totalPaid = debt.payments.reduce((sum, p) => sum + p.amount, 0);
   const remaining = debt.amount - totalPaid;
   const progress = Math.min((totalPaid / debt.amount) * 100, 100);
@@ -29,12 +32,21 @@ export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps)
     date.setMonth(date.getMonth() + monthsLeft);
     
     return {
-        date: date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+        date: date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }),
         months: monthsLeft
     };
   };
 
   const estimation = getEstimation();
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    deleteDebt(debt.id);
+    onClose();
+  };
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -54,27 +66,36 @@ export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps)
                 </span>
                 {debt.status === 'PAID' && (
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border bg-green-500/20 text-green-400 border-green-500/20">
-                        PAID OFF
+                        LUNAS
                     </span>
                 )}
             </div>
             <h2 className="text-2xl font-bold text-white">{debt.person}</h2>
             {debt.description && <p className="text-sm text-gray-400 mt-1">{debt.description}</p>}
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400">
-            <span className="material-symbols-outlined">close</span>
-          </button>
+          <div className="flex items-center gap-1">
+            <button 
+                onClick={handleDeleteClick} 
+                className="p-2 hover:bg-rose-500/10 rounded-full text-rose-500/40 hover:text-rose-500 transition-colors"
+                title="Hapus Data"
+            >
+                <span className="material-symbols-outlined">delete</span>
+            </button>
+            <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400">
+                <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white/5 rounded-xl p-4 border border-white/5">
-                    <p className="text-xs text-gray-400 mb-1">Total Amount</p>
+                    <p className="text-xs text-gray-400 mb-1">Total Jumlah</p>
                     <p className="text-lg font-bold text-white">Rp {debt.amount.toLocaleString('id-ID')}</p>
                 </div>
                 <div className="bg-white/5 rounded-xl p-4 border border-white/5">
-                    <p className="text-xs text-gray-400 mb-1">Remaining</p>
+                    <p className="text-xs text-gray-400 mb-1">Sisa</p>
                     <p className="text-lg font-bold text-gold">Rp {remaining.toLocaleString('id-ID')}</p>
                 </div>
             </div>
@@ -82,7 +103,7 @@ export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps)
             {/* Progress */}
             <div>
                 <div className="flex justify-between text-xs text-gray-400 mb-2">
-                    <span>Repayment Progress</span>
+                    <span>Progres Pembayaran</span>
                     <span className="text-white">{Math.round(progress)}%</span>
                 </div>
                 <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
@@ -100,9 +121,9 @@ export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps)
                         <span className="material-symbols-outlined text-indigo-400">event_upcoming</span>
                      </div>
                      <div>
-                        <p className="text-xs text-indigo-300 font-medium uppercase">Estimated Payoff</p>
+                        <p className="text-xs text-indigo-300 font-medium uppercase">Estimasi Lunas</p>
                         <p className="text-sm text-white">
-                            ~ {estimation.months} months ({estimation.date})
+                            ~ {estimation.months} bulan ({estimation.date})
                         </p>
                      </div>
                 </div>
@@ -112,12 +133,12 @@ export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps)
             <div>
                 <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
                     <span className="material-symbols-outlined text-gray-400 text-lg">history</span>
-                    Payment History
+                    Riwayat Pembayaran
                 </h3>
                 
                 <div className="relative pl-4 space-y-6 before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-[2px] before:bg-white/10">
                     {debt.payments.length === 0 ? (
-                        <p className="text-sm text-gray-500 italic pl-4">No payments recorded yet.</p>
+                        <p className="text-sm text-gray-500 italic pl-4">Belum ada pembayaran tercatat.</p>
                     ) : (
                         [...debt.payments].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((payment) => (
                             <div key={payment.id} className="relative pl-6">
@@ -153,17 +174,27 @@ export default function DebtDetailModal({ debt, onClose }: DebtDetailModalProps)
                     onClick={() => setShowPaymentModal(true)}
                     className="w-full py-3.5 rounded-xl bg-white text-black font-bold text-sm hover:bg-gray-200 transition-colors"
                 >
-                    Record Payment
+                    Catat Pembayaran
                 </button>
             </div>
         )}
       </div>
 
-      <PaymentModal 
+      <PaymentModal  
         isOpen={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
         debtId={debt.id}
         remainingAmount={remaining}
+      />
+
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDelete}
+        title={`Hapus ${debt.type === 'DEBT' ? 'Hutang' : 'Piutang'}?`}
+        message={`Data ${debt.type === 'DEBT' ? 'hutang' : 'piutang'} atas nama ${debt.person} akan dihapus permanen. Lanjutkan?`}
+        confirmText="Hapus"
+        isDangerous={true}
       />
     </div>,
     document.body

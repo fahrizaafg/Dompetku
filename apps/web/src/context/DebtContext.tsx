@@ -44,7 +44,7 @@ export function DebtProvider({ children }: { children: ReactNode }) {
   });
   
   const { addNotification } = useNotification();
-  const { addTransaction } = useUser();
+  const { addTransaction, deleteTransaction, transactions } = useUser();
 
   useEffect(() => {
     localStorage.setItem('dompetku_debts', JSON.stringify(debts));
@@ -68,7 +68,7 @@ export function DebtProvider({ children }: { children: ReactNode }) {
     const timeStr = fullTime.substring(0, 5);
     
     addTransaction({
-      title: debtData.type === 'DEBT' ? `Loan from ${debtData.person}` : `Loan to ${debtData.person}`,
+      title: debtData.type === 'DEBT' ? `Pinjaman dari ${debtData.person}` : `Pinjaman ke ${debtData.person}`,
       type: debtData.type === 'DEBT' ? 'INCOME' : 'EXPENSE',
       amount: debtData.amount,
       date: dateStr,
@@ -78,8 +78,8 @@ export function DebtProvider({ children }: { children: ReactNode }) {
     });
 
     addNotification({
-      title: "New Debt Record",
-      message: `Added ${debtData.type === 'DEBT' ? 'debt to' : 'receivable from'} ${debtData.person}`,
+      title: "Transaksi Hutang Baru",
+      message: `Menambahkan ${debtData.type === 'DEBT' ? 'hutang ke' : 'piutang dari'} ${debtData.person}`,
       type: "info"
     });
   };
@@ -102,8 +102,8 @@ export function DebtProvider({ children }: { children: ReactNode }) {
 
       if (isPaidOff && debt.status !== 'PAID') {
          addNotification({
-            title: "Debt Paid Off!",
-            message: `${debt.person}'s ${debt.type.toLowerCase()} is fully paid.`,
+            title: "Hutang Lunas!",
+            message: `${debt.type === 'DEBT' ? 'Hutang' : 'Piutang'} ${debt.person} telah lunas.`,
             type: "alert"
          });
       }
@@ -122,7 +122,7 @@ export function DebtProvider({ children }: { children: ReactNode }) {
       : [paymentData.date, "00:00"];
 
     addTransaction({
-      title: targetDebt.type === 'DEBT' ? `Repayment to ${targetDebt.person}` : `Payment from ${targetDebt.person}`,
+      title: targetDebt.type === 'DEBT' ? `Pelunasan ke ${targetDebt.person}` : `Pembayaran dari ${targetDebt.person}`,
       type: targetDebt.type === 'DEBT' ? 'EXPENSE' : 'INCOME',
       amount: paymentData.amount,
       date: dateStr,
@@ -133,6 +133,56 @@ export function DebtProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteDebt = (id: string) => {
+    const debtToDelete = debts.find(d => d.id === id);
+    if (debtToDelete) {
+      // 1. Delete the initial debt creation transaction
+      const [dateStr, fullTime] = debtToDelete.createdAt.split('T');
+      const timeStr = fullTime.substring(0, 5);
+      
+      const expectedTitle = debtToDelete.type === 'DEBT' 
+          ? `Pinjaman dari ${debtToDelete.person}` 
+          : `Pinjaman ke ${debtToDelete.person}`;
+          
+      const transactionToDelete = transactions.find(t => 
+          t.amount === debtToDelete.amount &&
+          t.date === dateStr &&
+          t.time === timeStr &&
+          t.title === expectedTitle
+      );
+      
+      if (transactionToDelete) {
+          deleteTransaction(transactionToDelete.id);
+      }
+
+      // 2. Delete all payment transactions
+      debtToDelete.payments.forEach(payment => {
+          const [pDateStr, pTimeStr] = payment.date.includes('T') 
+            ? payment.date.split('T')
+            : [payment.date, "00:00"];
+          
+          const pExpectedTitle = debtToDelete.type === 'DEBT' 
+            ? `Pelunasan ke ${debtToDelete.person}` 
+            : `Pembayaran dari ${debtToDelete.person}`;
+          
+          const pTransaction = transactions.find(t => 
+            t.amount === payment.amount &&
+            t.date === pDateStr &&
+            t.time === pTimeStr.substring(0, 5) &&
+            t.title === pExpectedTitle
+          );
+          
+          if (pTransaction) {
+              deleteTransaction(pTransaction.id);
+          }
+      });
+
+      addNotification({
+        title: "Hutang Dihapus",
+        message: "Data hutang dan riwayat transaksi terkait telah dihapus.",
+        type: "info"
+      });
+    }
+
     setDebts(prev => prev.filter(d => d.id !== id));
   };
 

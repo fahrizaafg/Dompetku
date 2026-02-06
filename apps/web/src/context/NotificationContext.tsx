@@ -41,7 +41,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     const newNotification: Notification = {
       ...notification,
       id: Date.now(),
-      time: "Just now",
+      time: "Baru saja",
       isRead: false,
     };
     setNotifications(prev => [newNotification, ...prev]);

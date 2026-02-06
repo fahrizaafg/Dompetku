@@ -139,7 +139,7 @@ export default function ImageCropper({ imageSrc, onCancel, onCrop }: ImageCroppe
         
         ctx.translate(size/2, size/2);
         ctx.translate(position.x * ratio, position.y * ratio);
-        ctx.scale(scale, scale);
+        ctx.scale(scale * ratio, scale * ratio);
         
         const img = imageRef.current;
         // Draw image centered
@@ -152,7 +152,7 @@ export default function ImageCropper({ imageSrc, onCancel, onCrop }: ImageCroppe
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 touch-none">
       <div className="bg-[#121212] border border-white/10 rounded-3xl p-6 w-full max-w-sm animate-in zoom-in-95 duration-200 shadow-2xl shadow-black/50">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-bold text-white">Adjust Photo</h3>
+          <h3 className="text-lg font-bold text-white">Sesuaikan Foto</h3>
           <button onClick={onCancel} className="p-2 rounded-full hover:bg-white/10 transition-colors">
             <span className="material-symbols-outlined text-white/70">close</span>
           </button>

@@ -67,7 +67,7 @@ export default function Login() {
             </div>
             
             <p className="text-center text-white/30 text-xs mt-8">
-                &copy; {new Date().getFullYear()} Dompetku. Simple & Secure.
+                &copy; {new Date().getFullYear()} Dompetku. Simpel & Aman.
             </p>
         </div>
     </div>

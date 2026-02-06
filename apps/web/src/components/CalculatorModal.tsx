@@ -112,7 +112,7 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in duration-200">
       <div className="w-full max-w-sm bg-[#0A0A0A] border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col animate-in slide-in-from-bottom-10 duration-300">
         
         {/* Display */}
@@ -160,16 +160,16 @@ export const CalculatorModal: React.FC<CalculatorModalProps> = ({
         <div className="p-4 pt-0 grid grid-cols-2 gap-3">
              <button 
                 onClick={onClose}
-                className="py-3 rounded-2xl border border-white/10 text-gray-400 font-medium hover:bg-white/5 transition-colors"
-            >
-                Cancel
-            </button>
-            <button 
-                onClick={handleConfirm}
-                className={`py-3 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${type === 'EXPENSE' ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20' : 'bg-primary hover:bg-primary-dark shadow-primary/20'}`}
-            >
-                Use Result
-            </button>
+                    className="py-3 rounded-2xl border border-white/10 text-gray-400 font-medium hover:bg-white/5 transition-colors"
+                >
+                    Batal
+                </button>
+                <button 
+                    onClick={handleConfirm}
+                    className={`py-3 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${type === 'EXPENSE' ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20' : 'bg-primary hover:bg-primary-dark shadow-primary/20'}`}
+                >
+                    Gunakan Hasil
+                </button>
         </div>
       </div>
     </div>

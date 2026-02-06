@@ -25,9 +25,9 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
   const handleCalculate = () => {
     if (totalDebt <= 0) {
       setResult({
-        label: "Already Free!",
-        value: "No Debt",
-        subtext: "You are currently debt-free. Great job!"
+        label: "Sudah Bebas!",
+        value: "Tidak Ada Hutang",
+        subtext: "Anda saat ini bebas hutang. Kerja bagus!"
       });
       return;
     }
@@ -40,12 +40,12 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
       const now = new Date();
       now.setMonth(now.getMonth() + months);
       
-      const freedomDate = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const freedomDate = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
       
       setResult({
-        label: "Debt Free By",
+        label: "Bebas Hutang Pada",
         value: freedomDate,
-        subtext: `${months} months to go`
+        subtext: `${months} bulan lagi`
       });
     } else {
       if (!targetDate) return;
@@ -59,18 +59,18 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
       
       if (months <= 0) {
         setResult({
-          label: "Impossible Date",
-          value: "Too Soon",
-          subtext: "Please pick a future date"
+          label: "Tanggal Tidak Valid",
+          value: "Terlalu Cepat",
+          subtext: "Mohon pilih tanggal di masa depan"
         });
         return;
       }
 
       const monthlyNeeded = Math.ceil(totalDebt / months);
       setResult({
-        label: "Monthly Payment",
+        label: "Pembayaran Bulanan",
         value: `Rp ${monthlyNeeded.toLocaleString('id-ID')}`,
-        subtext: `For ${months} months`
+        subtext: `Selama ${months} bulan`
       });
     }
   };
@@ -100,8 +100,8 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
 
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h2 className="text-xl font-bold text-white tracking-tight">Smart Payoff Strategy</h2>
-            <p className="text-xs text-gray-400">Plan your journey to financial freedom</p>
+            <h2 className="text-xl font-bold text-white tracking-tight">Strategi Pelunasan Cerdas</h2>
+            <p className="text-xs text-gray-400">Rencanakan perjalanan menuju kebebasan finansial</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400 transition-colors">
             <span className="material-symbols-outlined">close</span>
@@ -110,7 +110,7 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
 
         {/* Total Debt Context */}
         <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/5 flex items-center justify-between">
-          <span className="text-sm text-gray-300">Total Outstanding</span>
+          <span className="text-sm text-gray-300">Total Belum Lunas</span>
           <span className="text-lg font-bold text-gold">Rp {totalDebt.toLocaleString('id-ID')}</span>
         </div>
 
@@ -122,7 +122,7 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
               mode === 'BUDGET' ? 'bg-white/10 text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'
             }`}
           >
-            Budget Driven
+            Berdasarkan Anggaran
           </button>
           <button 
             onClick={() => { setMode('TARGET'); setResult(null); }}
@@ -130,7 +130,7 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
               mode === 'TARGET' ? 'bg-white/10 text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'
             }`}
           >
-            Goal Driven
+            Berdasarkan Target
           </button>
         </div>
 
@@ -138,7 +138,7 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
         <div className="mb-6 space-y-4">
           {mode === 'BUDGET' ? (
             <div>
-              <label className="block text-xs font-medium text-gray-400 mb-2">How much can you pay monthly?</label>
+              <label className="block text-xs font-medium text-gray-400 mb-2">Berapa yang bisa Anda bayar per bulan?</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gold font-bold text-sm">Rp</span>
                 <input 
@@ -152,7 +152,7 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
             </div>
           ) : (
             <div>
-              <label className="block text-xs font-medium text-gray-400 mb-2">When do you want to be debt-free?</label>
+              <label className="block text-xs font-medium text-gray-400 mb-2">Kapan Anda ingin bebas hutang?</label>
               <input 
                 type="date" 
                 value={targetDate}
@@ -169,7 +169,7 @@ export default function PayoffModal({ isOpen, onClose, totalDebt }: PayoffModalP
           disabled={mode === 'BUDGET' ? !budgetAmount : !targetDate}
           className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-yellow-600 text-black font-bold text-sm shadow-lg shadow-gold/20 hover:shadow-gold/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Analyze Plan
+          Analisis Rencana
         </button>
 
         {/* Result Section */}

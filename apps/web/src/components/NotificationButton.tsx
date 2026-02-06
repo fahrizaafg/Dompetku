@@ -37,9 +37,9 @@ export default function NotificationButton() {
       {isOpen && (
         <div className="absolute right-0 top-12 w-80 bg-[#0A0A0A] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in slide-in-from-top-2 fade-in duration-200 ring-1 ring-white/10">
           <div className="px-4 py-3 border-b border-white/5 bg-white/5 flex justify-between items-center">
-            <h3 className="text-sm font-semibold text-white">Notifications</h3>
+            <h3 className="text-sm font-semibold text-white">Notifikasi</h3>
             {unreadCount > 0 && (
-              <span className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded-full font-bold">{unreadCount} New</span>
+              <span className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded-full font-bold">{unreadCount} Baru</span>
             )}
           </div>
           <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
@@ -65,7 +65,7 @@ export default function NotificationButton() {
               className="w-full py-2 text-xs font-medium text-gray-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={unreadCount === 0}
             >
-              Mark all as read
+              Tandai semua sudah dibaca
             </button>
           </div>
         </div>

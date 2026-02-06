@@ -13,7 +13,7 @@ export const calculateProgress = (amount: number, payments: Payment[]) => {
 };
 
 export const createPayment = (amount: number, date: string, note?: string) => {
-    if (amount <= 0) throw new Error("Amount must be positive");
+    if (amount <= 0) throw new Error("Jumlah harus positif");
     return {
         id: Date.now().toString(),
         amount,

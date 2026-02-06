@@ -30,8 +30,8 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!person.trim()) newErrors.person = 'Name is required';
-    if (!amount || parseInt(amount.replace(/\D/g, '')) <= 0) newErrors.amount = 'Valid amount is required';
+    if (!person.trim()) newErrors.person = 'Nama wajib diisi';
+    if (!amount || parseInt(amount.replace(/\D/g, '')) <= 0) newErrors.amount = 'Jumlah valid wajib diisi';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -62,7 +62,7 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
       
       <div className="relative w-full max-w-md bg-[#0a120f] border-t sm:border border-white/10 rounded-t-3xl sm:rounded-2xl p-6 shadow-2xl animate-in slide-in-from-bottom-10">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-white">Add New Record</h2>
+          <h2 className="text-xl font-bold text-white">Tambah Transaksi Baru</h2>
           <button onClick={handleClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400">
             <span className="material-symbols-outlined">close</span>
           </button>
@@ -78,7 +78,7 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
                 type === 'DEBT' ? 'bg-red-500/20 text-red-400 shadow-sm' : 'text-gray-500 hover:text-gray-300'
               }`}
             >
-              I Owe (Debt)
+              Hutang Saya
             </button>
             <button
               type="button"
@@ -87,13 +87,13 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
                 type === 'RECEIVABLE' ? 'bg-primary/20 text-primary shadow-sm' : 'text-gray-500 hover:text-gray-300'
               }`}
             >
-              Owes Me (Receivable)
+              Piutang Saya
             </button>
           </div>
 
           {/* Amount */}
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Amount</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Jumlah</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gold font-bold text-sm">Rp</span>
               <input
@@ -111,7 +111,7 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
 
           {/* Person */}
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Person Name</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Nama Orang</label>
             <input
               type="text"
               value={person}
@@ -119,31 +119,31 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
               className={`w-full bg-white/5 border rounded-xl py-3 px-4 text-white placeholder-gray-600 focus:outline-none focus:border-gold/50 transition-colors ${
                 errors.person ? 'border-red-500' : 'border-white/10'
               }`}
-              placeholder="Who is this related to?"
+              placeholder="Terkait dengan siapa?"
             />
             {errors.person && <p className="text-red-500 text-xs mt-1">{errors.person}</p>}
           </div>
 
           {/* Due Date */}
           <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Due Date (Optional)</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Jatuh Tempo (Opsional)</label>
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-gold/50 transition-colors [color-scheme:dark]"
+              className="w-full block bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-gold/50 transition-colors [color-scheme:dark] h-[46px]"
             />
           </div>
 
            {/* Description */}
            <div>
-            <label className="block text-xs font-medium text-gray-400 mb-1">Description (Optional)</label>
+            <label className="block text-xs font-medium text-gray-400 mb-1">Keterangan (Opsional)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-gold/50 transition-colors resize-none"
-              placeholder="Any notes..."
+              placeholder="Keterangan tambahan..."
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function AddDebtModal({ isOpen, onClose }: AddDebtModalProps) {
             type="submit"
             className="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold to-yellow-600 text-black font-bold text-sm shadow-lg shadow-gold/20 hover:shadow-gold/30 active:scale-[0.98] transition-all mt-4"
           >
-            Save Record
+            Simpan Transaksi
           </button>
         </form>
       </div>
